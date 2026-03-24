@@ -315,9 +315,13 @@ static size_t content_disposition(const char *str, const char *end,
           curlx_free(outs->filename);
 
         if(per->config->output_dir) {
-          outs->filename = curl_maprintf("%s/%s", per->config->output_dir,
-                                         filename);
+          char *f = curl_maprintf("%s/%s", per->config->output_dir,
+                                  filename);
           curlx_free(filename);
+          if(!f)
+            return CURL_WRITEFUNC_ERROR;
+          outs->filename = curlx_strdup(f);
+          curl_free(f);
           if(!outs->filename)
             return CURL_WRITEFUNC_ERROR;
         }
@@ -366,9 +370,13 @@ static size_t content_disposition(const char *str, const char *end,
           curlx_free(outs->filename);
 
         if(per->config->output_dir) {
-          outs->filename = curl_maprintf("%s/%s", per->config->output_dir,
-                                         filename);
+          char *f = curl_maprintf("%s/%s", per->config->output_dir,
+                                  filename);
           curlx_free(filename);
+          if(!f)
+            return CURL_WRITEFUNC_ERROR;
+          outs->filename = curlx_strdup(f);
+          curl_free(f);
           if(!outs->filename)
             return CURL_WRITEFUNC_ERROR;
         }
@@ -397,7 +405,7 @@ static size_t content_disposition(const char *str, const char *end,
      hdrcbdata->config->show_headers) {
     /* still awaiting the Content-Disposition header, store the header in
        memory. Since it is not null-terminated, we need an extra dance. */
-    char *clone = curl_maprintf("%.*s", (int)cb, str);
+    char *clone = curlx_memdup0(str, cb);
     if(clone) {
       struct curl_slist *old = hdrcbdata->headlist;
       hdrcbdata->headlist = curl_slist_append(old, clone);
