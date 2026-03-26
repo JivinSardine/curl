@@ -274,7 +274,6 @@ static char *custom_strdup(const char *ptr)
     return (char *)m->mem;
   }
   return NULL;
-
 }
 
 static void *custom_realloc(void *ptr, size_t size)
