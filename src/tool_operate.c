@@ -896,7 +896,6 @@ static CURLcode etag_compare(struct OperationConfig *config)
   else
     header = curlx_strdup("If-None-Match: \"\"");
 
-
   if(!header) {
     if(file)
       curlx_fclose(file);
