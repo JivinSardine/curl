@@ -324,7 +324,7 @@ CURLcode globalconf_init(void)
   global->first = global->last = config_alloc();
   if(global->first) {
     /* Perform the libcurl initialization */
-#ifdef GLOBAL_MEM
+#ifdef CURL_DEBUG_GLOBAL_MEM
     result = curl_global_init_mem(CURL_GLOBAL_ALL, custom_malloc, custom_free,
                                   custom_realloc, custom_strdup,
                                   custom_calloc);
